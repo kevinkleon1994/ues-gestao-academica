@@ -84,7 +84,7 @@
     }
     @media(max-width:380px){.cards{grid-template-columns:1fr}.metric{display:grid;grid-template-columns:1fr auto;align-items:center}.metric .value{margin:0}}
   
-    .install-help{display:none}
+    .install-help{display:inline-flex}
     @media(display-mode:standalone){.install-help{display:none!important}body{overscroll-behavior-y:none}.topbar{padding-top:max(10px,env(safe-area-inset-top))}.content{padding-bottom:max(92px,env(safe-area-inset-bottom))}}
 
 
@@ -137,7 +137,24 @@
     .login-button:disabled{opacity:.65;cursor:wait}
     .login-error{min-height:22px;margin-top:12px;color:#b42318;font-weight:700;font-size:14px}
     .login-version{margin-top:18px;color:#82939d;font-size:12px}
-</style>
+
+    /* v34 — status da planilha, tela cheia e instalação PWA */
+    .utility-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .connection-pill{display:inline-flex;align-items:center;gap:10px;min-height:46px;padding:0 18px;border:1px solid #d6e1e8;border-radius:999px;background:#fff;color:#607383;font-weight:700;white-space:nowrap;box-shadow:0 2px 8px rgba(7,59,97,.04)}
+    .connection-dot{width:14px;height:14px;border-radius:50%;background:#9aa9b3;box-shadow:0 0 0 4px rgba(154,169,179,.12);flex:none}
+    .connection-pill.connected .connection-dot{background:#00c77b;box-shadow:0 0 0 4px rgba(0,199,123,.12)}
+    .connection-pill.disconnected .connection-dot{background:#e24034;box-shadow:0 0 0 4px rgba(226,64,52,.12)}
+    .connection-pill.checking .connection-dot{background:#f4b400;box-shadow:0 0 0 4px rgba(244,180,0,.12);animation:uesPulse 1.15s infinite}
+    @keyframes uesPulse{50%{opacity:.4;transform:scale(.82)}}
+    .icon-action{width:58px;height:58px;border:1px solid #d6e1e8;border-radius:17px;background:#fff;color:#051624;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:.18s ease;box-shadow:0 2px 8px rgba(7,59,97,.04)}
+    .icon-action:hover{transform:translateY(-1px);border-color:#9fc0d4;box-shadow:0 7px 18px rgba(7,59,97,.12)}
+    .icon-action:focus-visible{outline:3px solid rgba(14,139,188,.25);outline-offset:2px}
+    .icon-action svg{width:25px;height:25px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+    .icon-action .download-icon{fill:currentColor;stroke:none;width:24px;height:24px}
+    @media(max-width:850px){.utility-actions{width:100%;justify-content:flex-end}.connection-pill{min-height:40px;padding:0 12px;font-size:12px}.icon-action{width:44px;height:44px;border-radius:13px}.icon-action svg{width:21px;height:21px}}
+    @media(max-width:520px){.connection-pill span:last-child{max-width:155px;overflow:hidden;text-overflow:ellipsis}.utility-actions{gap:7px}.top-actions{width:100%;justify-content:space-between}}
+
+  </style>
 </head>
 <body class="ues-locked">
 
@@ -150,7 +167,7 @@
     <div class="login-field"><label for="loginSenha">Senha</label><input id="loginSenha" name="senha" type="password" required autocomplete="current-password"></div>
     <button class="login-button" id="loginButton" type="submit">Entrar</button>
     <div class="login-error" id="loginError" role="alert"></div>
-    <div class="login-version">Sistema UES v33.0.0<br>Desenvolvido por Kevin Fernandes</div>
+    <div class="login-version">Sistema UES v34.0.0<br>Desenvolvido por Kevin Fernandes</div>
   </form>
 </div>
 <div class="mobile-overlay" id="mobileOverlay" aria-hidden="true"></div>
@@ -176,7 +193,20 @@
     <header class="topbar">
       <button class="mobile-menu" id="mobileMenu" type="button" aria-label="Abrir menu" aria-expanded="false">☰</button>
       <div><h2 id="pageTitle">Dashboard</h2><small id="pageSubtitle">Visão geral da Universidade da Escola Sabatina</small></div>
-      <div class="top-actions"><button class="btn secondary install-help" id="installAppBtn" type="button">Instalar aplicativo</button><span id="lastUpdate" style="font-size:12px;color:#6a7d89"></span><button class="btn secondary" onclick="reloadCurrent()">↻ Recarregar</button><button class="btn" onclick="atualizarSistema()">Atualizar dados</button></div>
+      <div class="top-actions">
+        <div class="utility-actions" aria-label="Ferramentas do aplicativo">
+          <div id="sheetsConnection" class="connection-pill checking" role="status" aria-live="polite" title="Verificando conexão com o Google Sheets">
+            <span class="connection-dot" aria-hidden="true"></span><span id="sheetsConnectionText">Verificando Google Sheets...</span>
+          </div>
+          <button class="icon-action" id="fullscreenBtn" type="button" title="Modo de apresentação" aria-label="Entrar no modo de apresentação">
+            <svg id="fullscreenIcon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5M3 8l6-6M21 8l-6-6M3 16l6 6M21 16l-6 6"/></svg>
+          </button>
+          <button class="icon-action install-help" id="installAppBtn" type="button" title="Instalar aplicativo" aria-label="Instalar aplicativo">
+            <svg class="download-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 3h4v10h4l-6 7-6-7h4z"/></svg>
+          </button>
+        </div>
+        <span id="lastUpdate" style="font-size:12px;color:#6a7d89"></span><button class="btn secondary" onclick="reloadCurrent()">↻ Recarregar</button><button class="btn" onclick="atualizarSistema()">Atualizar dados</button>
+      </div>
     </header>
     <div class="content" id="content">
       <section id="view-dashboard" class="view active">
@@ -238,7 +268,7 @@
         </div>
         <div class="panel" style="margin-top:16px"><h3>Prévia do relatório</h3><div id="reportPreview" class="empty">Selecione um relatório acima.</div></div>
       </section>
-      <footer class="system-footer">Sistema UES v33.0.0 • Desenvolvido por Kevin Fernandes</footer>
+      <footer class="system-footer">Sistema UES v34.0.0 • Desenvolvido por Kevin Fernandes</footer>
 
     </div>
   </main>
@@ -266,7 +296,7 @@ function obterUrlWebApp(){
 function callServer(fn,...args){
   // Mantém compatibilidade quando o mesmo HTML é executado dentro do Apps Script.
   if(window.google&&google.script&&google.script.run){
-    return new Promise((resolve,reject)=>google.script.run.withSuccessHandler(resolve).withFailureHandler(e=>reject(new Error(e&&e.message?e.message:String(e))))[fn](...args));
+    return new Promise((resolve,reject)=>google.script.run.withSuccessHandler(d=>{atualizarStatusSheets('connected','Google Sheets conectado');resolve(d)}).withFailureHandler(e=>{atualizarStatusSheets('disconnected','Google Sheets desconectado');reject(new Error(e&&e.message?e.message:String(e)))})[fn](...args));
   }
 
   // GitHub Pages: comunicação por JSONP com a ponte RPC do Apps Script.
@@ -277,7 +307,7 @@ function callServer(fn,...args){
     const script=document.createElement('script');
     const timer=setTimeout(()=>finalizar(new Error('Tempo esgotado ao comunicar com o Google Apps Script. Verifique a implantação e a URL /exec.')),30000);
     function limpar(){clearTimeout(timer);delete window[callback];script.remove()}
-    function finalizar(erro,dados){limpar();erro?reject(erro):resolve(dados)}
+    function finalizar(erro,dados){limpar();if(erro){atualizarStatusSheets('disconnected','Google Sheets desconectado');reject(erro)}else{atualizarStatusSheets('connected','Google Sheets conectado');resolve(dados)}}
     window[callback]=resposta=>{
       if(!resposta||resposta.sucessoRpc!==true){finalizar(new Error((resposta&&resposta.erro)||'Resposta inválida do servidor.'));return}
       finalizar(null,resposta.dados);
@@ -411,6 +441,58 @@ tableObserver.observe(document.body,{subtree:true,childList:true});
 annotateResponsiveTables();
 
 
+
+// v34 — estado de conexão com a planilha Google Sheets.
+function atualizarStatusSheets(estado,mensagem){
+  const pill=$('sheetsConnection'),texto=$('sheetsConnectionText');
+  if(!pill||!texto)return;
+  pill.classList.remove('connected','disconnected','checking');
+  pill.classList.add(estado||'checking');
+  texto.textContent=mensagem||(estado==='connected'?'Google Sheets conectado':estado==='disconnected'?'Google Sheets desconectado':'Verificando Google Sheets...');
+  pill.title=texto.textContent;
+}
+async function verificarConexaoSheets(){
+  if(!navigator.onLine){atualizarStatusSheets('disconnected','Sem conexão com a internet');return false;}
+  atualizarStatusSheets('checking','Verificando Google Sheets...');
+  try{
+    await callServer('webAppObterConfiguracao');
+    atualizarStatusSheets('connected','Google Sheets conectado');
+    return true;
+  }catch(e){
+    atualizarStatusSheets('disconnected','Google Sheets desconectado');
+    console.warn('Falha ao verificar Google Sheets:',e);
+    return false;
+  }
+}
+window.addEventListener('online',verificarConexaoSheets);
+window.addEventListener('offline',()=>atualizarStatusSheets('disconnected','Sem conexão com a internet'));
+
+// v34 — modo de apresentação / tela cheia.
+function estaEmTelaCheia(){return !!(document.fullscreenElement||document.webkitFullscreenElement);}
+async function alternarTelaCheia(){
+  try{
+    if(!estaEmTelaCheia()){
+      const el=document.documentElement;
+      if(el.requestFullscreen)await el.requestFullscreen();
+      else if(el.webkitRequestFullscreen)el.webkitRequestFullscreen();
+    }else{
+      if(document.exitFullscreen)await document.exitFullscreen();
+      else if(document.webkitExitFullscreen)document.webkitExitFullscreen();
+    }
+  }catch(e){toast('Não foi possível alterar o modo de apresentação.',true);}
+}
+function atualizarBotaoTelaCheia(){
+  const b=$('fullscreenBtn');if(!b)return;
+  const sair=estaEmTelaCheia();
+  b.title=sair?'Sair da Tela Cheia':'Modo de apresentação';
+  b.setAttribute('aria-label',b.title);
+  const icon=$('fullscreenIcon');
+  if(icon)icon.innerHTML=sair?'<path d="M9 9H4V4M15 9h5V4M9 15H4v5M15 15h5v5M4 9l5-5M20 9l-5-5M4 15l5 5M20 15l-5 5"/>':'<path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5M3 8l6-6M21 8l-6-6M3 16l6 6M21 16l-6 6"/>';
+}
+if($('fullscreenBtn'))$('fullscreenBtn').addEventListener('click',alternarTelaCheia);
+document.addEventListener('fullscreenchange',atualizarBotaoTelaCheia);
+document.addEventListener('webkitfullscreenchange',atualizarBotaoTelaCheia);
+
 let uesInstallPrompt=null;
 window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();uesInstallPrompt=event;const b=document.getElementById('installAppBtn');if(b)b.style.display='inline-flex'});
 window.addEventListener('appinstalled',()=>{uesInstallPrompt=null;const b=document.getElementById('installAppBtn');if(b)b.style.display='none';toast('Aplicativo instalado com sucesso.')});
@@ -445,6 +527,7 @@ async function autenticarUES(event){
 }
 if($('loginForm'))$('loginForm').addEventListener('submit',autenticarUES);
 (async function init(){
+  await verificarConexaoSheets();
   await carregarConfiguracaoVisual();
   // A autenticação é exigida a cada nova sessão/aba do navegador.
   let autenticado=false;try{autenticado=sessionStorage.getItem('ues-auth')==='1'}catch(e){}
