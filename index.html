@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>UES Gestão Acadêmica</title>
+  <link rel="preload" as="image" href="ues-logo.png">
   <meta name="theme-color" content="#073b61">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -154,22 +155,80 @@
     @media(max-width:850px){.utility-actions{width:100%;justify-content:flex-end}.connection-pill{min-height:40px;padding:0 12px;font-size:12px}.icon-action{width:44px;height:44px;border-radius:13px}.icon-action svg{width:21px;height:21px}}
     @media(max-width:520px){.connection-pill span:last-child{max-width:155px;overflow:hidden;text-overflow:ellipsis}.utility-actions{gap:7px}.top-actions{width:100%;justify-content:space-between}}
 
+  
+    /* v35 — diálogo orientado de instalação */
+    .install-modal{position:fixed;inset:0;z-index:10050;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(2,27,45,.66);backdrop-filter:blur(5px)}
+    .install-modal.open{display:flex}
+    .install-dialog{width:min(680px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:24px;box-shadow:0 26px 80px rgba(0,0,0,.3);color:#12344d}
+    .install-dialog-header{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:25px 27px 16px;border-bottom:1px solid #e3ebf0}
+    .install-dialog-header h2{margin:0;color:#073b61;font-size:25px;letter-spacing:.01em}
+    .install-dialog-header p{margin:7px 0 0;color:#627783}
+    .install-close{width:40px;height:40px;border:0;border-radius:50%;background:#edf3f6;color:#073b61;font-size:25px;line-height:1;cursor:pointer}
+    .install-dialog-body{padding:22px 27px 8px}
+    .install-section{padding:0 0 22px}
+    .install-section+.install-section{padding-top:20px;border-top:1px solid #e3ebf0}
+    .install-section h3{margin:0 0 15px;color:#073b61;font-size:19px}
+    .install-step{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start;margin:12px 0;color:#3c5362;line-height:1.48}
+    .install-step-number{width:30px;height:30px;display:grid;place-items:center;border-radius:50%;background:#0b7ea4;color:#fff;font-weight:800}
+    .install-tip{margin-top:13px;padding:13px 15px;border-radius:12px;background:#eef8fb;color:#365567;font-size:14px}
+    .install-dialog-actions{display:flex;justify-content:flex-end;gap:10px;padding:15px 27px 25px}
+    .install-primary,.install-secondary{min-height:46px;padding:0 20px;border-radius:12px;font-weight:800;cursor:pointer}
+    .install-primary{border:0;background:#0b7ea4;color:#fff}
+    .install-primary[hidden]{display:none}
+    .install-secondary{border:1px solid #cad9e1;background:#fff;color:#073b61}
+    @media(max-width:600px){.install-dialog-header,.install-dialog-body,.install-dialog-actions{padding-left:19px;padding-right:19px}.install-dialog-header h2{font-size:21px}.install-dialog-actions{flex-direction:column-reverse}.install-primary,.install-secondary{width:100%}}
+
   </style>
 </head>
 <body class="ues-locked">
 
 <div class="login-screen" id="loginScreen">
   <form class="login-card" id="loginForm" autocomplete="off">
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADElEQVR42mNk+M/wHwAF/gL+Xw0YAAAAAElFTkSuQmCC" id="loginLogo" alt="Universidade da Escola Sabatina">
+    <img src="ues-logo.png" id="loginLogo" alt="Universidade da Escola Sabatina">
     <h1>Gestão Acadêmica UES</h1>
     <p>Entre para acessar o sistema.</p>
     <div class="login-field"><label for="loginUsuario">Usuário</label><input id="loginUsuario" name="usuario" type="text" required autofocus autocomplete="username"></div>
     <div class="login-field"><label for="loginSenha">Senha</label><input id="loginSenha" name="senha" type="password" required autocomplete="current-password"></div>
     <button class="login-button" id="loginButton" type="submit">Entrar</button>
     <div class="login-error" id="loginError" role="alert"></div>
-    <div class="login-version">Sistema UES v34.0.0<br>Desenvolvido por Kevin Fernandes</div>
+    <div class="login-version">Desenvolvido por Kevin Fernandes · © 2026 · Versão 1.0.0</div>
   </form>
 </div>
+
+<div class="install-modal" id="installModal" role="dialog" aria-modal="true" aria-labelledby="installModalTitle">
+  <div class="install-dialog">
+    <div class="install-dialog-header">
+      <div><h2 id="installModalTitle">INSTALAÇÃO DO APLICATIVO</h2><p>Instale a Gestão Acadêmica UES para abrir com aparência de aplicativo.</p></div>
+      <button class="install-close" id="installModalClose" type="button" aria-label="Fechar">×</button>
+    </div>
+    <div class="install-dialog-body">
+      <section class="install-section" id="installDesktopSection">
+        <h3>Instalar no computador</h3>
+        <div class="install-step"><span class="install-step-number">1</span><span>Abra esta página no <strong>Google Chrome</strong> ou <strong>Microsoft Edge</strong>, no Windows ou macOS.</span></div>
+        <div class="install-step"><span class="install-step-number">2</span><span>Use o ícone de instalação na barra de endereço ou abra o menu do navegador.</span></div>
+        <div class="install-step"><span class="install-step-number">3</span><span>Escolha <strong>Instalar Gestão Acadêmica UES</strong>. No Safari do macOS, use <strong>Arquivo → Adicionar ao Dock</strong>, quando disponível.</span></div>
+        <div class="install-tip">Se a instalação já tiver sido realizada, procure o aplicativo no Menu Iniciar, Launchpad, Dock ou na lista de aplicativos.</div>
+      </section>
+      <section class="install-section">
+        <h3>Instalar no Android</h3>
+        <div class="install-step"><span class="install-step-number">1</span><span>Abra esta página no Chrome.</span></div>
+        <div class="install-step"><span class="install-step-number">2</span><span>Toque no menu <strong>⋮</strong> e escolha <strong>Instalar aplicativo</strong> ou <strong>Adicionar à tela inicial</strong>.</span></div>
+        <div class="install-step"><span class="install-step-number">3</span><span>Confirme em <strong>Instalar</strong>.</span></div>
+      </section>
+      <section class="install-section">
+        <h3>Instalar no iPhone ou iPad</h3>
+        <div class="install-step"><span class="install-step-number">1</span><span>Abra esta página no Safari.</span></div>
+        <div class="install-step"><span class="install-step-number">2</span><span>Toque em <strong>Compartilhar</strong>.</span></div>
+        <div class="install-step"><span class="install-step-number">3</span><span>Escolha <strong>Adicionar à Tela de Início</strong> e confirme em <strong>Adicionar</strong>.</span></div>
+      </section>
+    </div>
+    <div class="install-dialog-actions">
+      <button class="install-secondary" id="installModalDismiss" type="button">Fechar</button>
+      <button class="install-primary" id="installNativeBtn" type="button" hidden>Instalar agora</button>
+    </div>
+  </div>
+</div>
+
 <div class="mobile-overlay" id="mobileOverlay" aria-hidden="true"></div>
 <div class="shell">
   <aside class="sidebar" id="sidebar">
@@ -268,7 +327,7 @@
         </div>
         <div class="panel" style="margin-top:16px"><h3>Prévia do relatório</h3><div id="reportPreview" class="empty">Selecione um relatório acima.</div></div>
       </section>
-      <footer class="system-footer">Sistema UES v34.0.0 • Desenvolvido por Kevin Fernandes</footer>
+      <footer class="system-footer">Sistema UES v35.0.0 • Desenvolvido por Kevin Fernandes</footer>
 
     </div>
   </main>
@@ -494,14 +553,39 @@ document.addEventListener('fullscreenchange',atualizarBotaoTelaCheia);
 document.addEventListener('webkitfullscreenchange',atualizarBotaoTelaCheia);
 
 let uesInstallPrompt=null;
-window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();uesInstallPrompt=event;const b=document.getElementById('installAppBtn');if(b)b.style.display='inline-flex'});
-window.addEventListener('appinstalled',()=>{uesInstallPrompt=null;const b=document.getElementById('installAppBtn');if(b)b.style.display='none';toast('Aplicativo instalado com sucesso.')});
-async function instalarUES(){
-  if(uesInstallPrompt){uesInstallPrompt.prompt();await uesInstallPrompt.userChoice;uesInstallPrompt=null;return}
-  const ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
-  alert(ios?'No Safari, toque em Compartilhar e depois em “Adicionar à Tela de Início”.':'No navegador, abra o menu e escolha “Adicionar à tela inicial” ou “Instalar aplicativo”.');
+const installModal=document.getElementById('installModal');
+const installNativeBtn=document.getElementById('installNativeBtn');
+function abrirModalInstalacao(){
+  if(installModal){installModal.classList.add('open');document.body.style.overflow='hidden'}
+  if(installNativeBtn)installNativeBtn.hidden=!uesInstallPrompt;
+}
+function fecharModalInstalacao(){
+  if(installModal){installModal.classList.remove('open');document.body.style.overflow=''}
+}
+window.addEventListener('beforeinstallprompt',event=>{
+  event.preventDefault();uesInstallPrompt=event;
+  const b=document.getElementById('installAppBtn');if(b)b.style.display='inline-flex';
+  if(installNativeBtn)installNativeBtn.hidden=false;
+});
+window.addEventListener('appinstalled',()=>{
+  uesInstallPrompt=null;fecharModalInstalacao();
+  const b=document.getElementById('installAppBtn');if(b)b.style.display='none';
+  toast('Aplicativo instalado com sucesso.');
+});
+async function instalarUES(){abrirModalInstalacao()}
+async function executarInstalacaoNativa(){
+  if(!uesInstallPrompt)return;
+  uesInstallPrompt.prompt();
+  await uesInstallPrompt.userChoice;
+  uesInstallPrompt=null;
+  if(installNativeBtn)installNativeBtn.hidden=true;
 }
 const installBtn=document.getElementById('installAppBtn');if(installBtn)installBtn.addEventListener('click',instalarUES);
+if(document.getElementById('installModalClose'))document.getElementById('installModalClose').addEventListener('click',fecharModalInstalacao);
+if(document.getElementById('installModalDismiss'))document.getElementById('installModalDismiss').addEventListener('click',fecharModalInstalacao);
+if(installNativeBtn)installNativeBtn.addEventListener('click',executarInstalacaoNativa);
+if(installModal)installModal.addEventListener('click',e=>{if(e.target===installModal)fecharModalInstalacao()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&installModal&&installModal.classList.contains('open'))fecharModalInstalacao()});
 
 async function carregarConfiguracaoVisual(){
   try{
